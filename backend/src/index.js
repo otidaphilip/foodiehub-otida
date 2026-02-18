@@ -4,7 +4,7 @@ const cors = require("cors");
 const { ApolloServer } = require("apollo-server-express");
 
 const typeDefs = require("./schema");
-const resolvers = require("./resolver");
+const resolvers = require("./resolvers");
 
 async function startServer() {
   const app = express();
