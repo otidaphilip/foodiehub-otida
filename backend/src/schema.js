@@ -10,7 +10,7 @@ const typeDefs = gql`
     name: String!
     location: String
     description: String
-    imageUrl: String
+    image_url: String
   }
 
   input UpdateRestaurantInput {
@@ -18,7 +18,7 @@ const typeDefs = gql`
     name: String
     location: String
     description: String
-    imageUrl: String
+    image_url: String
   }
 
   input AddCategoryInput {
@@ -36,7 +36,7 @@ const typeDefs = gql`
     restaurantId: ID!
     categoryId: ID!
     description: String
-    imageUrl: String
+    image_url: String
   }
 
   input UpdateProductInput {
@@ -46,7 +46,7 @@ const typeDefs = gql`
     restaurantId: ID
     categoryId: ID
     description: String
-    imageUrl: String
+    image_url: String
   }
 
   input SearchProductInput {
@@ -66,7 +66,7 @@ const typeDefs = gql`
     name: String!
     location: String
     description: String
-    imageUrl: String
+    image_url: String
     products: [Product]
   }
 
@@ -80,7 +80,7 @@ const typeDefs = gql`
     name: String!
     price: Float!
     description: String
-    imageUrl: String
+    image_url: String
     restaurant: Restaurant
     category: Category
   }
