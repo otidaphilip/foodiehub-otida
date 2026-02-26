@@ -1,10 +1,6 @@
-const db = require("./db");
+import db from "./db";
 
 const resolvers = {
-  // -------------------------
-  // QUERIES
-  // -------------------------
-
   Query: {
     products: async () => {
       const [rows] = await db.query("SELECT * FROM products");
@@ -268,4 +264,4 @@ const resolvers = {
   },
 };
 
-module.exports = resolvers;
+export default resolvers;

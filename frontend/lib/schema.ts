@@ -1,11 +1,6 @@
-const { gql } = require("apollo-server-express");
+import { gql } from "graphql-tag";
 
-const typeDefs = gql`
-
-  # -------------------------
-  # INPUT TYPES
-  # -------------------------
-
+const typeDefs = gql` 
   input AddRestaurantInput {
     name: String!
     location: String
@@ -57,10 +52,6 @@ const typeDefs = gql`
     restaurantId: ID
   }
 
-  # -------------------------
-  # CORE TYPES
-  # -------------------------
-
   type Restaurant {
     id: ID!
     name: String!
@@ -85,46 +76,29 @@ const typeDefs = gql`
     category: Category
   }
 
-  # -------------------------
-  # QUERIES
-  # -------------------------
-
   type Query {
-    # Get All
     products: [Product]
     restaurants: [Restaurant]
     categories: [Category]
-
-    # Get Single
     product(id: ID!): Product
     restaurant(id: ID!): Restaurant
     category(id: ID!): Category
-
-    # Advanced Search
     searchProducts(input: SearchProductInput): [Product]
   }
 
-  # -------------------------
-  # MUTATIONS (FULL CRUD)
-  # -------------------------
-
   type Mutation {
-
-    # Restaurant CRUD
     addRestaurant(input: AddRestaurantInput!): Restaurant
     updateRestaurant(input: UpdateRestaurantInput!): Restaurant
     deleteRestaurant(id: ID!): Boolean
 
-    # Category CRUD
     addCategory(input: AddCategoryInput!): Category
     updateCategory(input: UpdateCategoryInput!): Category
     deleteCategory(id: ID!): Boolean
 
-    # Product CRUD
     addProduct(input: AddProductInput!): Product
     updateProduct(input: UpdateProductInput!): Product
     deleteProduct(id: ID!): Boolean
   }
 `;
 
-module.exports = typeDefs;
+export default typeDefs;
