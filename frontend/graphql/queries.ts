@@ -20,7 +20,7 @@ export const GET_PRODUCTS = gql`
 `;
 
 export const SEARCH_PRODUCTS = gql`
-  query SearchProducts($input: SearchProductInput) {
+  query SearchProducts($input: SearchProductsInput) {
     searchProducts(input: $input) {
       id
       name
@@ -39,7 +39,7 @@ export const SEARCH_PRODUCTS = gql`
 `;
 
 export const GET_RESTAURANT = gql`
-  query($id: ID!) {
+  query GetRestaurant($id: Int!) {
     restaurant(id: $id) {
       id
       name

@@ -3,6 +3,8 @@ import { startServerAndCreateNextHandler } from "@as-integrations/next";
 import typeDefs from "../../../lib/schema";
 import resolvers from "../../../lib/resolvers";
 
+export const dynamic = "force-dynamic"; // ✅ ADD THIS
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,

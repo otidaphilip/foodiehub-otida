@@ -1,92 +1,153 @@
 import db from "./db";
+import type { RowDataPacket, ResultSetHeader } from "mysql2";
 
 const resolvers = {
   Query: {
+    // =========================
+    // PRODUCTS
+    // =========================
     products: async () => {
-      const [rows] = await db.query("SELECT * FROM products");
-      return rows;
-    },
-
-    restaurants: async () => {
-      const [rows] = await db.query("SELECT * FROM restaurants");
-      return rows;
-    },
-
-    categories: async () => {
-      const [rows] = await db.query("SELECT * FROM categories");
-      return rows;
-    },
-
-    product: async (_, { id }) => {
-      const [rows] = await db.query(
-        "SELECT * FROM products WHERE id = ?",
-        [id]
-      );
-      return rows[0];
-    },
-
-    restaurant: async (_, { id }) => {
-      const [rows] = await db.query(
-        "SELECT * FROM restaurants WHERE id = ?",
-        [id]
-      );
-      return rows[0];
-    },
-
-    category: async (_, { id }) => {
-      const [rows] = await db.query(
-        "SELECT * FROM categories WHERE id = ?",
-        [id]
-      );
-      return rows[0];
-    },
-
-    searchProducts: async (_, { input }) => {
-      let query = "SELECT * FROM products WHERE 1=1";
-      const params = [];
-
-      if (input?.searchTerm) {
-        query += " AND name LIKE ?";
-        params.push(`%${input.searchTerm}%`);
+      try {
+        const [rows] = await db.query("SELECT * FROM products");
+        return rows;
+      } catch (error) {
+        console.error("REAL DB ERROR:", error);
+        throw error;
       }
+    },
 
-      if (input?.categoryId) {
-        query += " AND category_id = ?";
-        params.push(input.categoryId);
+    product: async (
+      _: unknown,
+      { id }: { id: number }
+    ): Promise<RowDataPacket | null> => {
+      try {
+        const [rows] = await db.query<RowDataPacket[]>(
+          "SELECT * FROM products WHERE id = ?",
+          [Number(id)]
+        );
+        return rows[0] || null;
+      } catch (error) {
+        console.error("Error fetching product:", error);
+        throw new Error("Failed to fetch product");
       }
+    },
 
-      if (input?.restaurantId) {
-        query += " AND restaurant_id = ?";
-        params.push(input.restaurantId);
+    // =========================
+    // RESTAURANTS
+    // =========================
+    restaurants: async (): Promise<RowDataPacket[]> => {
+      try {
+        const [rows] = await db.query<RowDataPacket[]>(
+          "SELECT * FROM restaurants"
+        );
+        return rows;
+      } catch (error) {
+        console.error("Error fetching restaurants:", error);
+        throw new Error("Failed to fetch restaurants");
       }
+    },
 
-      if (input?.minPrice !== undefined) {
-        query += " AND price >= ?";
-        params.push(input.minPrice);
+    restaurant: async (
+      _: unknown,
+      { id }: { id: number }
+    ): Promise<RowDataPacket | null> => {
+      try {
+        const [rows] = await db.query<RowDataPacket[]>(
+          "SELECT * FROM restaurants WHERE id = ?",
+          [Number(id)]
+        );
+        return rows[0] || null;
+      } catch (error) {
+        console.error("Error fetching restaurant:", error);
+        throw new Error("Failed to fetch restaurant");
       }
+    },
 
-      if (input?.maxPrice !== undefined) {
-        query += " AND price <= ?";
-        params.push(input.maxPrice);
+    // =========================
+    // CATEGORIES
+    // =========================
+    categories: async (): Promise<RowDataPacket[]> => {
+      try {
+        const [rows] = await db.query<RowDataPacket[]>(
+          "SELECT * FROM categories"
+        );
+        return rows;
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+        throw new Error("Failed to fetch categories");
       }
+    },
 
-      const [rows] = await db.query(query, params);
-      return rows;
+    category: async (
+      _: unknown,
+      { id }: { id: number }
+    ): Promise<RowDataPacket | null> => {
+      try {
+        const [rows] = await db.query<RowDataPacket[]>(
+          "SELECT * FROM categories WHERE id = ?",
+          [Number(id)]
+        );
+        return rows[0] || null;
+      } catch (error) {
+        console.error("Error fetching category:", error);
+        throw new Error("Failed to fetch category");
+      }
+    },
+
+    // =========================
+    // SEARCH PRODUCTS
+    // =========================
+    searchProducts: async (
+      _: unknown,
+      { input }: { input?: any }
+    ): Promise<RowDataPacket[]> => {
+      try {
+        let query = "SELECT * FROM products WHERE 1=1";
+        const params: any[] = [];
+
+        if (input?.searchTerm) {
+          query += " AND name LIKE ?";
+          params.push(`%${input.searchTerm}%`);
+        }
+
+        if (input?.categoryId) {
+          query += " AND category_id = ?";
+          params.push(Number(input.categoryId));
+        }
+
+        if (input?.restaurantId) {
+          query += " AND restaurant_id = ?";
+          params.push(Number(input.restaurantId));
+        }
+
+        if (input?.minPrice !== undefined) {
+          query += " AND price >= ?";
+          params.push(Number(input.minPrice));
+        }
+
+        if (input?.maxPrice !== undefined) {
+          query += " AND price <= ?";
+          params.push(Number(input.maxPrice));
+        }
+
+        const [rows] = await db.query<RowDataPacket[]>(query, params);
+        return rows;
+      } catch (error) {
+        console.error("Error searching products:", error);
+        throw new Error("Failed to search products");
+      }
     },
   },
 
-  // -------------------------
+  // =========================
   // MUTATIONS
-  // -------------------------
-
+  // =========================
   Mutation: {
-
-    // -------- Restaurant --------
-
-    addRestaurant: async (_, { input }) => {
+    // RESTAURANT
+    addRestaurant: async (_: unknown, { input }: { input: any }) => {
       const { name, location, description, imageUrl } = input;
 
-      const [result] = await db.query(
+      const [result] = await db.query<ResultSetHeader>(
         `INSERT INTO restaurants (name, location, description, image_url)
          VALUES (?, ?, ?, ?)`,
         [name, location, description, imageUrl]
@@ -98,7 +159,7 @@ const resolvers = {
       };
     },
 
-    updateRestaurant: async (_, { input }) => {
+    updateRestaurant: async (_: unknown, { input }: { input: any }) => {
       const { id, name, location, description, imageUrl } = input;
 
       await db.query(
@@ -108,62 +169,56 @@ const resolvers = {
              description = COALESCE(?, description),
              image_url = COALESCE(?, image_url)
          WHERE id = ?`,
-        [name, location, description, imageUrl, id]
+        [name, location, description, imageUrl, Number(id)]
       );
 
-      const [rows] = await db.query(
+      const [rows] = await db.query<RowDataPacket[]>(
         "SELECT * FROM restaurants WHERE id = ?",
-        [id]
+        [Number(id)]
       );
 
-      return rows[0];
+      return rows[0] || null;
     },
 
-    deleteRestaurant: async (_, { id }) => {
-      await db.query("DELETE FROM restaurants WHERE id = ?", [id]);
+    deleteRestaurant: async (_: unknown, { id }: { id: number }) => {
+      await db.query("DELETE FROM restaurants WHERE id = ?", [Number(id)]);
       return true;
     },
 
-    // -------- Category --------
-
-    addCategory: async (_, { input }) => {
-      const { name } = input;
-
-      const [result] = await db.query(
+    // CATEGORY
+    addCategory: async (_: unknown, { input }: { input: any }) => {
+      const [result] = await db.query<ResultSetHeader>(
         "INSERT INTO categories (name) VALUES (?)",
-        [name]
+        [input.name]
       );
 
       return {
         id: result.insertId,
-        name,
+        name: input.name,
       };
     },
 
-    updateCategory: async (_, { input }) => {
-      const { id, name } = input;
-
+    updateCategory: async (_: unknown, { input }: { input: any }) => {
       await db.query(
         "UPDATE categories SET name = COALESCE(?, name) WHERE id = ?",
-        [name, id]
+        [input.name, Number(input.id)]
       );
 
-      const [rows] = await db.query(
+      const [rows] = await db.query<RowDataPacket[]>(
         "SELECT * FROM categories WHERE id = ?",
-        [id]
+        [Number(input.id)]
       );
 
-      return rows[0];
+      return rows[0] || null;
     },
 
-    deleteCategory: async (_, { id }) => {
-      await db.query("DELETE FROM categories WHERE id = ?", [id]);
+    deleteCategory: async (_: unknown, { id }: { id: number }) => {
+      await db.query("DELETE FROM categories WHERE id = ?", [Number(id)]);
       return true;
     },
 
-    // -------- Product --------
-
-    addProduct: async (_, { input }) => {
+    // PRODUCT
+    addProduct: async (_: unknown, { input }: { input: any }) => {
       const {
         name,
         price,
@@ -173,7 +228,7 @@ const resolvers = {
         imageUrl,
       } = input;
 
-      const [result] = await db.query(
+      const [result] = await db.query<ResultSetHeader>(
         `INSERT INTO products
          (name, price, restaurant_id, category_id, description, image_url)
          VALUES (?, ?, ?, ?, ?, ?)`,
@@ -186,7 +241,7 @@ const resolvers = {
       };
     },
 
-    updateProduct: async (_, { input }) => {
+    updateProduct: async (_: unknown, { input }: { input: any }) => {
       const {
         id,
         name,
@@ -213,51 +268,50 @@ const resolvers = {
           categoryId,
           description,
           imageUrl,
-          id,
+          Number(id),
         ]
       );
 
-      const [rows] = await db.query(
+      const [rows] = await db.query<RowDataPacket[]>(
         "SELECT * FROM products WHERE id = ?",
-        [id]
+        [Number(id)]
       );
 
-      return rows[0];
+      return rows[0] || null;
     },
 
-    deleteProduct: async (_, { id }) => {
-      await db.query("DELETE FROM products WHERE id = ?", [id]);
+    deleteProduct: async (_: unknown, { id }: { id: number }) => {
+      await db.query("DELETE FROM products WHERE id = ?", [Number(id)]);
       return true;
     },
   },
 
-  // -------------------------
-  // RELATIONAL RESOLVERS
-  // -------------------------
-
+  // =========================
+  // RELATIONSHIPS
+  // =========================
   Product: {
-    restaurant: async (parent) => {
-      const [rows] = await db.query(
+    restaurant: async (parent: any) => {
+      const [rows] = await db.query<RowDataPacket[]>(
         "SELECT * FROM restaurants WHERE id = ?",
-        [parent.restaurant_id]
+        [Number(parent.restaurant_id)]
       );
-      return rows[0];
+      return rows[0] || null;
     },
 
-    category: async (parent) => {
-      const [rows] = await db.query(
+    category: async (parent: any) => {
+      const [rows] = await db.query<RowDataPacket[]>(
         "SELECT * FROM categories WHERE id = ?",
-        [parent.category_id]
+        [Number(parent.category_id)]
       );
-      return rows[0];
+      return rows[0] || null;
     },
   },
 
   Restaurant: {
-    products: async (parent) => {
-      const [rows] = await db.query(
+    products: async (parent: any) => {
+      const [rows] = await db.query<RowDataPacket[]>(
         "SELECT * FROM products WHERE restaurant_id = ?",
-        [parent.id]
+        [Number(parent.id)]
       );
       return rows;
     },

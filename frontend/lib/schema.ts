@@ -1,55 +1,14 @@
 import { gql } from "graphql-tag";
 
-const typeDefs = gql` 
-  input AddRestaurantInput {
-    name: String!
-    location: String
-    description: String
-    image_url: String
-  }
-
-  input UpdateRestaurantInput {
+const typeDefs = gql`
+  type Product {
     id: ID!
-    name: String
-    location: String
-    description: String
-    image_url: String
-  }
-
-  input AddCategoryInput {
-    name: String!
-  }
-
-  input UpdateCategoryInput {
-    id: ID!
-    name: String
-  }
-
-  input AddProductInput {
     name: String!
     price: Float!
-    restaurantId: ID!
-    categoryId: ID!
     description: String
     image_url: String
-  }
-
-  input UpdateProductInput {
-    id: ID!
-    name: String
-    price: Float
-    restaurantId: ID
-    categoryId: ID
-    description: String
-    image_url: String
-  }
-
-  input SearchProductInput {
-    searchTerm: String
-    categoryId: ID
-    minPrice: Float
-    maxPrice: Float
-    restaurantId: ID
+    restaurant: Restaurant
+    category: Category
   }
 
   type Restaurant {
@@ -66,38 +25,82 @@ const typeDefs = gql`
     name: String!
   }
 
-  type Product {
-    id: ID!
-    name: String!
-    price: Float!
-    description: String
-    image_url: String
-    restaurant: Restaurant
-    category: Category
+  input SearchProductsInput {
+    searchTerm: String
+    categoryId: Int
+    restaurantId: Int
+    minPrice: Float
+    maxPrice: Float
   }
 
   type Query {
-    products: [Product]
-    restaurants: [Restaurant]
-    categories: [Category]
-    product(id: ID!): Product
-    restaurant(id: ID!): Restaurant
-    category(id: ID!): Category
-    searchProducts(input: SearchProductInput): [Product]
+    products: [Product!]!
+    product(id: Int!): Product
+
+    restaurants: [Restaurant!]!
+    restaurant(id: Int!): Restaurant
+
+    categories: [Category!]!
+    category(id: Int!): Category
+
+    searchProducts(input: SearchProductsInput): [Product!]!
   }
 
   type Mutation {
-    addRestaurant(input: AddRestaurantInput!): Restaurant
+    addRestaurant(input: RestaurantInput!): Restaurant
     updateRestaurant(input: UpdateRestaurantInput!): Restaurant
-    deleteRestaurant(id: ID!): Boolean
+    deleteRestaurant(id: Int!): Boolean
 
-    addCategory(input: AddCategoryInput!): Category
+    addCategory(input: CategoryInput!): Category
     updateCategory(input: UpdateCategoryInput!): Category
-    deleteCategory(id: ID!): Boolean
+    deleteCategory(id: Int!): Boolean
 
-    addProduct(input: AddProductInput!): Product
+    addProduct(input: ProductInput!): Product
     updateProduct(input: UpdateProductInput!): Product
-    deleteProduct(id: ID!): Boolean
+    deleteProduct(id: Int!): Boolean
+  }
+
+  input RestaurantInput {
+    name: String!
+    location: String
+    description: String
+    imageUrl: String
+  }
+
+  input UpdateRestaurantInput {
+    id: Int!
+    name: String
+    location: String
+    description: String
+    imageUrl: String
+  }
+
+  input CategoryInput {
+    name: String!
+  }
+
+  input UpdateCategoryInput {
+    id: Int!
+    name: String
+  }
+
+  input ProductInput {
+    name: String!
+    price: Float!
+    restaurantId: Int!
+    categoryId: Int!
+    description: String
+    imageUrl: String
+  }
+
+  input UpdateProductInput {
+    id: Int!
+    name: String
+    price: Float
+    restaurantId: Int
+    categoryId: Int
+    description: String
+    imageUrl: String
   }
 `;
 
