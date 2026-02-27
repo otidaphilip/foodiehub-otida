@@ -1,8 +1,17 @@
 # Node modules
 node_modules/
 
+# Next.js build
+.next/
+out/
+
 # Environment variables
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
 
 # Logs
 logs
@@ -13,9 +22,9 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
-# Build / dist folders (if you add later)
+# Build / dist folders
 dist/
 build/
 
-# IDE folders (optional but recommended)
+# IDE folders
 .vscode/
