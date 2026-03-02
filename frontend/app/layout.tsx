@@ -2,6 +2,7 @@
 
 import { ApolloProvider } from "@apollo/client/react";
 import client from "@/lib/apollo-client";
+import "./globals.css";
 
 export default function RootLayout({
   children,
