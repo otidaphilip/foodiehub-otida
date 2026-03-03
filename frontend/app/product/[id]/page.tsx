@@ -72,6 +72,16 @@ export default function ProductDetailPage() {
 
   return (
     <div className="container">
+
+      {/* 🔙 Back Button */}
+      <button
+        className="button"
+        style={{ marginBottom: "20px" }}
+        onClick={() => router.push("/")}
+      >
+        ← Back to Home
+      </button>
+
       <div className="card">
         <img
           src={product.imageUrl || "/placeholder.jpg"}
@@ -88,15 +98,6 @@ export default function ProductDetailPage() {
           <p className="restaurant-description">
             {product.description}
           </p>
-
-          <button
-            className="button"
-            onClick={() =>
-              router.push(`/restaurant/${product.restaurant?.id}`)
-            }
-          >
-            View Restaurant
-          </button>
         </div>
       </div>
     </div>

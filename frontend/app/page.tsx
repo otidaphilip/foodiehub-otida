@@ -167,9 +167,6 @@ return (
           <div className="card-content">
             <h3 className="product-name">{product.name}</h3>
             <p className="product-price">${product.price}</p>
-            <p className="muted">{product.restaurant?.name}</p>
-            <p className="muted">{product.category?.name}</p>
-
             <button
               className="button"
               onClick={() => router.push(`/product/${product.id}`)}
