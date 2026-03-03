@@ -11,4 +11,8 @@ const db = mysql.createPool({
   },
 });
 
+db.getConnection()
+  .then(() => console.log("✅ MySQL Connected"))
+  .catch((err) => console.error("❌ MySQL Connection Failed:", err));
+  
 export default db;

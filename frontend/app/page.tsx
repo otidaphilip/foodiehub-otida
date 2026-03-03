@@ -79,8 +79,6 @@ export default function HomePage() {
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [restaurantId, setRestaurantId] = useState("");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
 
   const { data: filterData } = useQuery<FilterData>(GET_FILTER_DATA);
 
@@ -90,8 +88,6 @@ export default function HomePage() {
         searchTerm: search || undefined,
         categoryId: categoryId || undefined,
         restaurantId: restaurantId || undefined,
-        minPrice: minPrice ? Number(minPrice) : undefined,
-        maxPrice: maxPrice ? Number(maxPrice) : undefined,
       },
     },
   });
@@ -101,61 +97,62 @@ export default function HomePage() {
 
   const products = data?.searchProducts ?? [];
 
-  return (
+return (
   <div className="container">
-    <h1 className="page-title">FoodieHub</h1>
+    <h1 className="page-title">Otida's Daily Dish</h1>
 
-    {/* Search */}
-    <div className="filters-wrapper">
-      <input
-        type="text"
-        placeholder="Search products..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="input"
-      />
+    {/* Top Section */}
+    <div className="top-section">
+      
+      {/* LEFT SIDE */}
+      <div className="left-side">
+        <button
+          className="button"
+          onClick={() => router.push("/restaurants")}
+        >
+          View Restaurants
+        </button>
 
-      <select
-        value={categoryId}
-        onChange={(e) => setCategoryId(e.target.value)}
-        className="select"
-      >
-        <option value="">All Categories</option>
-        {filterData?.categories?.map((cat) => (
-          <option key={cat.id} value={cat.id}>
-            {cat.name}
-          </option>
-        ))}
-      </select>
+        {/* Filters under button */}
+        <div className="filters-column">
+          <select
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+            className="select"
+          >
+            <option value="">All Categories</option>
+            {filterData?.categories?.map((cat) => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
 
-      <select
-        value={restaurantId}
-        onChange={(e) => setRestaurantId(e.target.value)}
-        className="select"
-      >
-        <option value="">All Restaurants</option>
-        {filterData?.restaurants?.map((res) => (
-          <option key={res.id} value={res.id}>
-            {res.name}
-          </option>
-        ))}
-      </select>
+          <select
+            value={restaurantId}
+            onChange={(e) => setRestaurantId(e.target.value)}
+            className="select"
+          >
+            <option value="">All Restaurants</option>
+            {filterData?.restaurants?.map((res) => (
+              <option key={res.id} value={res.id}>
+                {res.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
 
-      <input
-        type="number"
-        placeholder="Min Price"
-        value={minPrice}
-        onChange={(e) => setMinPrice(e.target.value)}
-        className="input"
-      />
-
-      <input
-        type="number"
-        placeholder="Max Price"
-        value={maxPrice}
-        onChange={(e) => setMaxPrice(e.target.value)}
-        className="input"
-      />
+      {/* RIGHT SIDE */}
+      <div className="right-side">
+        <input
+          type="text"
+          placeholder="🔍 Search products..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="input"
+        />
+      </div>
     </div>
 
     {/* Products */}
@@ -170,20 +167,14 @@ export default function HomePage() {
           <div className="card-content">
             <h3 className="product-name">{product.name}</h3>
             <p className="product-price">${product.price}</p>
-            <p className="muted">
-              {product.restaurant?.name}
-            </p>
-            <p className="muted">
-              {product.category?.name}
-            </p>
+            <p className="muted">{product.restaurant?.name}</p>
+            <p className="muted">{product.category?.name}</p>
 
             <button
               className="button"
-              onClick={() =>
-                router.push(`/restaurant/${product.restaurant?.id}`)
-              }
+              onClick={() => router.push(`/product/${product.id}`)}
             >
-              View Restaurant
+              View Product
             </button>
           </div>
         </div>
