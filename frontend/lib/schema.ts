@@ -7,12 +7,13 @@ const typeDefs = `#graphql
     description: String
   }
 
-  input UpdateRestaurantInput {
-    id: ID!
-    name: String
-    location: String
-    description: String
-  }
+input UpdateRestaurantInput {
+  id: ID!
+  name: String
+  location: String
+  description: String
+  imageUrl: String
+}
 
   input AddProductInput {
     name: String!
@@ -77,6 +78,7 @@ const typeDefs = `#graphql
     updateRestaurant(input: UpdateRestaurantInput!): Restaurant
     addProduct(input: AddProductInput!): Product
     deleteProduct(id: ID!): Boolean
+    deleteRestaurant(id: ID!): Boolean
   }
 `;
 

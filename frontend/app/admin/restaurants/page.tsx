@@ -1,7 +1,7 @@
 "use client";
 
 import { gql } from "@apollo/client";
-import { useQuery } from "@apollo/client/react";
+import { useQuery, useMutation } from "@apollo/client/react";
 import { useRouter } from "next/navigation";
 
 interface Restaurant {
@@ -26,15 +26,37 @@ const GET_RESTAURANTS = gql`
   }
 `;
 
+const DELETE_RESTAURANT = gql`
+  mutation DeleteRestaurant($id: ID!) {
+    deleteRestaurant(id: $id)
+  }
+`;
+
 export default function ManageRestaurants() {
   const router = useRouter();
-  const { data, loading, error } =
+
+  const { data, loading, error, refetch } =
     useQuery<RestaurantsData>(GET_RESTAURANTS);
+
+  const [deleteRestaurant] = useMutation(DELETE_RESTAURANT, {
+    onCompleted: () => {
+      refetch();
+    },
+  });
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error loading restaurants</p>;
 
   const restaurants = data?.restaurants ?? [];
+
+  const handleDelete = async (id: string) => {
+    const confirmDelete = confirm("Are you sure you want to delete this restaurant?");
+    if (!confirmDelete) return;
+
+    await deleteRestaurant({
+      variables: { id },
+    });
+  };
 
   return (
     <div className="container">
@@ -49,7 +71,10 @@ export default function ManageRestaurants() {
 
         <h1 className="page-title">Manage Restaurants</h1>
 
-        <button className="admin-add">
+        <button
+          className="admin-add"
+          onClick={() => router.push("/admin/restaurants/add")}
+        >
           + Add Restaurant
         </button>
       </div>
@@ -71,9 +96,32 @@ export default function ManageRestaurants() {
               <td>{restaurant.location}</td>
               <td>{restaurant.description}</td>
               <td className="action-buttons">
-                <button className="view-btn">View</button>
-                <button className="edit-btn">Edit</button>
-                <button className="delete-btn">Delete</button>
+                
+                <button
+                  className="view-btn"
+                  onClick={() =>
+                    router.push(`/admin/restaurants/view/${restaurant.id}`)
+                  }
+                >
+                  View
+                </button>
+
+                <button
+                  className="edit-btn"
+                  onClick={() =>
+                    router.push(`/admin/restaurants/edit/${restaurant.id}`)
+                  }
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="delete-btn"
+                  onClick={() => handleDelete(restaurant.id)}
+                >
+                  Delete
+                </button>
+
               </td>
             </tr>
           ))}

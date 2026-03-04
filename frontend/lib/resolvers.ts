@@ -266,6 +266,11 @@ const resolvers = {
       };
     },
 
+      deleteRestaurant: async (_: any, { id }: { id: number }) => {
+    await db.query("DELETE FROM restaurants WHERE id = ?", [id]);
+    return true;
+  },
+
     addProduct: async (_: any, { input }: { input: any }) => {
       const [result] = await db.query<ResultSetHeader>(
         `INSERT INTO products
@@ -284,7 +289,7 @@ const resolvers = {
       return {
         id: result.insertId,
         ...input,
-      };
+      };  
     },
 
     deleteProduct: async (_: any, { id }: { id: number }) => {
@@ -293,5 +298,7 @@ const resolvers = {
     },
   },
 };
+
+
 
 export default resolvers;
