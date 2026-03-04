@@ -101,59 +101,69 @@ return (
   <div className="container">
     <h1 className="page-title">Otida's Daily Dish</h1>
 
-    {/* Top Section */}
-    <div className="top-section">
-      
-      {/* LEFT SIDE */}
-      <div className="left-side">
-        <button
-          className="button"
-          onClick={() => router.push("/restaurants")}
-        >
-          View Restaurants
-        </button>
+{/* Top Section */}
+<div className="top-section">
 
-        {/* Filters under button */}
-        <div className="filters-column">
-          <select
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            className="select"
-          >
-            <option value="">All Categories</option>
-            {filterData?.categories?.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
+  {/* LEFT SIDE */}
+  <div className="left-side">
 
-          <select
-            value={restaurantId}
-            onChange={(e) => setRestaurantId(e.target.value)}
-            className="select"
-          >
-            <option value="">All Restaurants</option>
-            {filterData?.restaurants?.map((res) => (
-              <option key={res.id} value={res.id}>
-                {res.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+    <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
+      <button
+        className="button"
+        onClick={() => router.push("/restaurants")}
+      >
+        View Restaurants
+      </button>
 
-      {/* RIGHT SIDE */}
-      <div className="right-side">
-        <input
-          type="text"
-          placeholder="🔍 Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="input"
-        />
-      </div>
+      <button
+        className="button"
+        onClick={() => router.push("/admin")}
+      >
+        Admin
+      </button>
     </div>
+
+    {/* Filters */}
+    <div className="filters-column">
+      <select
+        value={categoryId}
+        onChange={(e) => setCategoryId(e.target.value)}
+        className="select"
+      >
+        <option value="">All Categories</option>
+        {filterData?.categories?.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.name}
+          </option>
+        ))}
+      </select>
+
+      <select
+        value={restaurantId}
+        onChange={(e) => setRestaurantId(e.target.value)}
+        className="select"
+      >
+        <option value="">All Restaurants</option>
+        {filterData?.restaurants?.map((res) => (
+          <option key={res.id} value={res.id}>
+            {res.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+
+  {/* RIGHT SIDE */}
+  <div className="right-side">
+    <input
+      type="text"
+      placeholder="🔍 Search products..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="input"
+    />
+  </div>
+</div>
 
     {/* Products */}
     <div className="grid">

@@ -238,3 +238,209 @@ body {
   font-size: 13px;
   height: 34px;
 }
+
+/* =========================
+   Admin Panel
+========================= */
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.admin-card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  padding: 24px;
+  background: #1a1a1a;
+  border-radius: 14px;
+  border: 1px solid #2a2a2a;
+  cursor: pointer;
+  transition: 0.25s ease;
+}
+
+.admin-card:hover {
+  transform: translateY(-6px);
+  border-color: #ff7a00;
+  box-shadow: 0 10px 25px rgba(255, 122, 0, 0.15);
+}
+
+.admin-card h3 {
+  margin: 0 0 6px;
+  color: white;
+  font-size: 18px;
+}
+
+.admin-card-icon {
+  font-size: 36px;
+}
+
+/* =========================
+   Admin Tables
+========================= */
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1a1a1a;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #2a2a2a;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 14px 16px;
+  text-align: left;
+}
+
+.admin-table th {
+  background: #151515;
+  color: #ff7a00;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.admin-table tr {
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.admin-table tr:hover {
+  background: #202020;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* =========================
+   Admin Buttons
+========================= */
+
+.admin-back {
+  background: transparent;
+  border: 1px solid #2a2a2a;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-back:hover {
+  border-color: #ff7a00;
+  color: #ff7a00;
+}
+
+.admin-add {
+  background: #ff7a00;
+  border: none;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.admin-add:hover {
+  background: #ff9500;
+}
+
+.view-btn,
+.edit-btn,
+.delete-btn {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.view-btn {
+  background: #2a2a2a;
+  color: white;
+}
+
+.view-btn:hover {
+  background: #3a3a3a;
+}
+
+.edit-btn {
+  background: #ff7a00;
+  color: black;
+}
+
+.edit-btn:hover {
+  background: #ff9500;
+}
+
+.delete-btn {
+  background: #8b0000;
+  color: white;
+}
+
+.delete-btn:hover {
+  background: #b00000;
+}
+
+/* =========================
+   Admin Forms
+========================= */
+
+.admin-form {
+  max-width: 600px;
+  background: #1a1a1a;
+  padding: 30px;
+  border-radius: 14px;
+  border: 1px solid #2a2a2a;
+}
+
+.admin-form label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  width: 100%;
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #2a2a2a;
+  background: #111;
+  color: white;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus,
+.admin-form select:focus {
+  outline: none;
+  border-color: #ff7a00;
+}
+
+/* View Page */
+
+.admin-view {
+  background: #1a1a1a;
+  padding: 30px;
+  border-radius: 14px;
+  border: 1px solid #2a2a2a;
+}
+
+.admin-view img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
