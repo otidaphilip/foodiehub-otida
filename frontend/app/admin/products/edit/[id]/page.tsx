@@ -139,51 +139,61 @@ export default function EditProduct() {
     });
   };
 
-  return (
-    <div className="container">
-      <h1>Edit Product</h1>
+return (
+  <div className="container center">
+    {/* Back Button */}
+    <button className="admin-back-orange" onClick={() => router.push("/admin/products")}>
+      ← Back
+    </button>
 
-      {addError && <p style={{ color: "red" }}>Failed to update: {addError.message}</p>}
+      {/* Right: Form */}
+      <div className="form-section">
+        <h1 className="page-title">Edit Product</h1>
+        {addError && <p className="error-message">Failed to update: {addError.message}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <label>Name:
-          <input name="name" value={form.name} onChange={handleChange} required />
-        </label>
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div className="form-row">
+            <label>Name</label>
+            <input name="name" value={form.name} onChange={handleChange} required />
+          </div>
 
-        <label>Price:
-          <input type="number" name="price" value={form.price} onChange={handleChange} required />
-        </label>
+          <div className="form-row">
+            <label>Price</label>
+            <input type="number" name="price" value={form.price} onChange={handleChange} required />
+          </div>
 
-        <label>Description:
-          <textarea name="description" value={form.description} onChange={handleChange} />
-        </label>
+          <div className="form-row">
+            <label>Description</label>
+            <textarea name="description" value={form.description} onChange={handleChange} />
+          </div>
 
-        <label>Image URL:
-          <input name="imageUrl" value={form.imageUrl} onChange={handleChange} />
-        </label>
+          <div className="form-row">
+            <label>Image URL</label>
+            <input name="imageUrl" value={form.imageUrl} onChange={handleChange} />
+          </div>
 
-        <label>Restaurant:
-          <select name="restaurantId" value={form.restaurantId} onChange={handleChange} required>
-            <option value="">Select Restaurant</option>
-            {restData?.restaurants.map(r => (
-              <option key={r.id} value={r.id}>{r.name}</option>
-            ))}
-          </select>
-        </label>
+          <div className="form-row">
+            <label>Restaurant</label>
+            <select name="restaurantId" value={form.restaurantId} onChange={handleChange} required>
+              <option value="">Select Restaurant</option>
+              {restData?.restaurants.map(r => (<option key={r.id} value={r.id}>{r.name}</option>))}
+            </select>
+          </div>
 
-        <label>Category:
-          <select name="categoryId" value={form.categoryId} onChange={handleChange} required>
-            <option value="">Select Category</option>
-            {catData?.categories.map(c => (
-              <option key={c.id} value={c.id}>{c.name}</option>
-            ))}
-          </select>
-        </label>
+          <div className="form-row">
+            <label>Category</label>
+            <select name="categoryId" value={form.categoryId} onChange={handleChange} required>
+              <option value="">Select Category</option>
+              {catData?.categories.map(c => (<option key={c.id} value={c.id}>{c.name}</option>))}
+            </select>
+          </div>
 
-        <button type="submit" disabled={adding}>
-          {adding ? "Updating..." : "Update Product"}
-        </button>
-      </form>
-    </div>
-  );
+          <button type="submit" className="admin-add" disabled={adding}>
+            {adding ? "Updating..." : "Update Product"}
+          </button>
+        </form>
+      </div>
+    
+  </div>
+);
 }

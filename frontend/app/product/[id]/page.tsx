@@ -64,41 +64,68 @@ export default function ProductDetailPage() {
     variables: { id },
   });
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>{error.message}</p>;
-  if (!data?.product) return <p>Product not found</p>;
+  if (loading) return <p className="container">Loading...</p>;
+  if (error) return <p className="container">{error.message}</p>;
+  if (!data?.product) return <p className="container">Product not found</p>;
 
   const product = data.product;
 
   return (
     <div className="container">
 
-      {/* 🔙 Back Button */}
+      {/* Back Button */}
       <button
-        className="button"
-        style={{ marginBottom: "20px" }}
+        className="admin-back back-btn"
         onClick={() => router.push("/")}
       >
         ← Back to Home
       </button>
 
-      <div className="card">
-        <img
-          src={product.imageUrl || "/placeholder.jpg"}
-          alt={product.name}
-        />
+      {/* Center Layout */}
+      <div className="view-product-wrapper">
 
-        <div className="card-content">
-          <h2 className="page-title">{product.name}</h2>
-          <p className="product-price">${product.price}</p>
-          <p className="muted">{product.category?.name}</p>
-          <p className="restaurant-location">
-            From: {product.restaurant?.name}
-          </p>
-          <p className="restaurant-description">
-            {product.description}
-          </p>
+        <div className="view-product-card">
+
+          {/* LEFT SIDE (Image) */}
+          <div className="view-product-left">
+            <img
+              src={product.imageUrl || "/placeholder.jpg"}
+              alt={product.name}
+              className="view-product-image"
+            />
+          </div>
+
+          {/* RIGHT SIDE (Details) */}
+          <div className="view-product-right">
+
+            <div className="product-id">
+              PRODUCT ID: {product.id}
+            </div>
+
+            <h2 className="product-name">
+              {product.name}
+            </h2>
+
+            <div className="product-price">
+              ${product.price}
+            </div>
+
+            <p className="product-category">
+              Category: {product.category?.name || "N/A"}
+            </p>
+
+            <p className="product-restaurant">
+              Restaurant: {product.restaurant?.name || "N/A"}
+            </p>
+
+            <p className="product-description">
+              {product.description || "No description available."}
+            </p>
+
+          </div>
+
         </div>
+
       </div>
     </div>
   );

@@ -45,12 +45,9 @@ export default function EditRestaurant() {
   const { id } = useParams();
   const router = useRouter();
 
-  const { data } = useQuery<RestaurantData>(
-    GET_RESTAURANT,
-    {
-      variables: { id: Number(id) },
-    }
-  );
+  const { data } = useQuery<RestaurantData>(GET_RESTAURANT, {
+    variables: { id: Number(id) },
+  });
 
   const [form, setForm] = useState({
     name: "",
@@ -59,12 +56,14 @@ export default function EditRestaurant() {
     imageUrl: "",
   });
 
-  const [updateRestaurant, { loading, error }] =
-    useMutation(UPDATE_RESTAURANT, {
+  const [updateRestaurant, { loading, error }] = useMutation(
+    UPDATE_RESTAURANT,
+    {
       onCompleted: () => {
         router.push("/admin/restaurants");
       },
-    });
+    }
+  );
 
   useEffect(() => {
     if (data?.restaurant) {
@@ -91,46 +90,71 @@ export default function EditRestaurant() {
   };
 
   return (
-    <div className="container">
-      <h1>Edit Restaurant</h1>
+    <div className="container center">
+      {/* Back */}
+      <button
+        className="admin-back-orange"
+        onClick={() => router.push("/admin/restaurants")}
+      >
+        ← Back
+      </button>
 
-      {error && <p style={{ color: "red" }}>{error.message}</p>}
+      <div className="form-section">
+        {error && <p className="error-message">{error.message}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          value={form.name}
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
-          required
-        />
+        <h1 className="page-title">Edit Restaurant</h1>
 
-        <input
-          value={form.location}
-          onChange={(e) =>
-            setForm({ ...form, location: e.target.value })
-          }
-        />
+        <form className="admin-form" onSubmit={handleSubmit}>
+          <div className="form-row">
+            <label>Name</label>
+            <input
+              value={form.name}
+              onChange={(e) =>
+                setForm({ ...form, name: e.target.value })
+              }
+              required
+            />
+          </div>
 
-        <textarea
-          value={form.description}
-          onChange={(e) =>
-            setForm({ ...form, description: e.target.value })
-          }
-        />
+          <div className="form-row">
+            <label>Location</label>
+            <input
+              value={form.location}
+              onChange={(e) =>
+                setForm({ ...form, location: e.target.value })
+              }
+            />
+          </div>
 
-        <input
-          placeholder="Image URL"
-          value={form.imageUrl}
-          onChange={(e) =>
-            setForm({ ...form, imageUrl: e.target.value })
-          }
-        />
+          <div className="form-row">
+            <label>Description</label>
+            <textarea
+              value={form.description}
+              onChange={(e) =>
+                setForm({ ...form, description: e.target.value })
+              }
+            />
+          </div>
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Updating..." : "Update"}
-        </button>
-      </form>
+          <div className="form-row">
+            <label>Image URL</label>
+            <input
+              value={form.imageUrl}
+              onChange={(e) =>
+                setForm({ ...form, imageUrl: e.target.value })
+              }
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="admin-add"
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update Restaurant"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

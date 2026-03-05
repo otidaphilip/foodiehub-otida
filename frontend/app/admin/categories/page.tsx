@@ -24,6 +24,7 @@ const GET_CATEGORIES = gql`
 
 export default function ManageCategories() {
   const router = useRouter();
+
   const { data, loading, error } =
     useQuery<CategoriesData>(GET_CATEGORIES);
 
@@ -37,7 +38,7 @@ export default function ManageCategories() {
 
       <div className="admin-header">
         <button
-          className="admin-back"
+          className="admin-add"
           onClick={() => router.push("/admin")}
         >
           ← Back
@@ -45,7 +46,10 @@ export default function ManageCategories() {
 
         <h1 className="page-title">Manage Categories</h1>
 
-        <button className="admin-add">
+        <button
+          className="admin-add"
+          onClick={() => router.push("/admin/categories/add")}
+        >
           + Add Category
         </button>
       </div>
@@ -62,10 +66,36 @@ export default function ManageCategories() {
           {categories.map((category) => (
             <tr key={category.id}>
               <td>{category.name}</td>
+
               <td className="action-buttons">
-                <button className="view-btn">View</button>
-                <button className="edit-btn">Edit</button>
-                <button className="delete-btn">Delete</button>
+
+                <button
+                  className="view-btn"
+                  onClick={() =>
+                    router.push(`/admin/categories/view/${category.id}`)
+                  }
+                >
+                  View
+                </button>
+
+                <button
+                  className="edit-btn"
+                  onClick={() =>
+                    router.push(`/admin/categories/edit/${category.id}`)
+                  }
+                >
+                  Edit
+                </button>
+
+                <button
+                  className="delete-btn"
+                  onClick={() =>
+                    router.push(`/admin/categories/delete/${category.id}`)
+                  }
+                >
+                  Delete
+                </button>
+
               </td>
             </tr>
           ))}

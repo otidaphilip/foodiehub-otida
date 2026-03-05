@@ -5,53 +5,29 @@ import { useState } from "react";
 import { gql } from "@apollo/client";
 import { useMutation, useQuery } from "@apollo/client/react";
 
-// 🔹 GraphQL Queries
 const GET_RESTAURANTS = gql`
   query GetRestaurants {
-    restaurants {
-      id
-      name
-    }
+    restaurants { id name }
   }
 `;
 
 const GET_CATEGORIES = gql`
   query GetCategories {
-    categories {
-      id
-      name
-    }
+    categories { id name }
   }
 `;
 
-// 🔹 GraphQL Mutation
 const ADD_PRODUCT = gql`
   mutation AddProduct($input: AddProductInput!) {
-    addProduct(input: $input) {
-      id
-      name
-    }
+    addProduct(input: $input) { id name }
   }
 `;
 
-// 🔹 Types
-interface Restaurant {
-  id: string;
-  name: string;
-}
+interface Restaurant { id: string; name: string }
+interface Category { id: string; name: string }
 
-interface Category {
-  id: string;
-  name: string;
-}
-
-interface GetRestaurantsData {
-  restaurants: Restaurant[];
-}
-
-interface GetCategoriesData {
-  categories: Category[];
-}
+interface GetRestaurantsData { restaurants: Restaurant[] }
+interface GetCategoriesData { categories: Category[] }
 
 export default function AddProduct() {
   const router = useRouter();
@@ -63,15 +39,11 @@ export default function AddProduct() {
   const [restaurantId, setRestaurantId] = useState("");
   const [categoryId, setCategoryId] = useState("");
 
-  // 🔹 Typed queries
   const { data: restData } = useQuery<GetRestaurantsData>(GET_RESTAURANTS);
   const { data: catData } = useQuery<GetCategoriesData>(GET_CATEGORIES);
 
-  // 🔹 Mutation
   const [addProduct, { loading, error }] = useMutation(ADD_PRODUCT, {
-    onCompleted: () => {
-      router.push("/admin/products");
-    },
+    onCompleted: () => router.push("/admin/products"),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -92,80 +64,68 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="container">
-      <button
-        className="admin-back"
-        onClick={() => router.push("/admin/products")}
-      >
-        ← Back
-      </button>
+   <div className="container center">
+    {/* Back Button */}
+    <button className="admin-back-orange" onClick={() => router.push("/admin/products")}>
+      ← Back
+    </button>
 
-      <h1 className="page-title">Add Product</h1>
+      <div className="form-section">
 
-      {error && <p style={{ color: "red" }}>{error.message}</p>}
+        <h1 className="page-title">Add Product</h1>
 
-      <form className="admin-form" onSubmit={handleSubmit}>
-        <label>Name</label>
-        <input
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
+        {error && (
+          <div className="error-message">{error.message}</div>
+        )}
 
-        <label>Price</label>
-        <input
-          type="number"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          required
-        />
+        <form className="admin-form" onSubmit={handleSubmit}>
 
-        <label>Description</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
+          <div className="form-row">
+            <label>Name</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} required />
+          </div>
 
-        <label>Image URL</label>
-        <input
-          value={imageUrl}
-          onChange={(e) => setImageUrl(e.target.value)}
-        />
+          <div className="form-row">
+            <label>Price</label>
+            <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
+          </div>
 
-        {/* 🔹 Restaurant Dropdown */}
-        <label>Restaurant</label>
-        <select
-          value={restaurantId}
-          onChange={(e) => setRestaurantId(e.target.value)}
-          required
-        >
-          <option value="">Select Restaurant</option>
-          {restData?.restaurants.map((r) => (
-            <option key={r.id} value={r.id}>
-              {r.name}
-            </option>
-          ))}
-        </select>
+          <div className="form-row">
+            <label>Description</label>
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+          </div>
 
-        {/* 🔹 Category Dropdown */}
-        <label>Category</label>
-        <select
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
-          required
-        >
-          <option value="">Select Category</option>
-          {catData?.categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+          <div className="form-row">
+            <label>Image URL</label>
+            <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
+          </div>
 
-        <button className="admin-add" disabled={loading}>
-          {loading ? "Creating..." : "Create Product"}
-        </button>
-      </form>
+          <div className="form-row">
+            <label>Restaurant</label>
+            <select value={restaurantId} onChange={(e) => setRestaurantId(e.target.value)} required>
+              <option value="">Select Restaurant</option>
+              {restData?.restaurants.map(r => (
+                <option key={r.id} value={r.id}>{r.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="form-row">
+            <label>Category</label>
+            <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
+              <option value="">Select Category</option>
+              {catData?.categories.map(c => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <button className="admin-add" disabled={loading}>
+            {loading ? "Creating..." : "Create Product"}
+          </button>
+
+        </form>
+      </div>
     </div>
   );
 }

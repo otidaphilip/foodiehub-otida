@@ -4,7 +4,7 @@ import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";    
 import { useParams, useRouter } from "next/navigation";
 
-// GraphQL query (fixed field names to match backend)
+// GraphQL query
 const GET_PRODUCT = gql`
   query GetProduct($id: ID!) {
     product(id: $id) {
@@ -12,7 +12,7 @@ const GET_PRODUCT = gql`
       name
       price
       description
-      imageUrl   # <-- fixed
+      imageUrl
       restaurant { name }
       category { name }
     }
@@ -25,7 +25,7 @@ interface Product {
   name: string;
   price: number;
   description?: string;
-  imageUrl?: string;  // <-- fixed
+  imageUrl?: string;
   restaurant?: { name: string };
   category?: { name: string };
 }
@@ -38,7 +38,6 @@ export default function ViewProduct() {
   const { id } = useParams();
   const router = useRouter();
 
-  // ✅ Tell TypeScript the type of data returned
   const { data, loading, error } = useQuery<ProductData>(GET_PRODUCT, { variables: { id } });
 
   if (loading) return <p>Loading...</p>;
@@ -47,14 +46,49 @@ export default function ViewProduct() {
   const product = data.product;
 
   return (
+  <div className="view-product-wrapper">
     <div className="container">
-      <button onClick={() => router.push("/admin/products")}>← Back</button>
-      <h1>{product.name}</h1>
-      <img src={product.imageUrl || "/placeholder.jpg"} alt={product.name} />
-      <p><strong>Price:</strong> ${product.price}</p>
-      <p><strong>Description:</strong> {product.description}</p>
-      <p><strong>Restaurant:</strong> {product.restaurant?.name}</p>
-      <p><strong>Category:</strong> {product.category?.name}</p>
+      <button
+        className="admin-add back-btn"
+        onClick={() => router.push("/admin/products")}
+      >
+        ← Back
+      </button>
+
+      <div className="view-product-card">
+        <div className="view-product-left">
+          <img
+            src={product.imageUrl || "/placeholder.jpg"}
+            alt={product.name}
+            className="view-product-image"
+          />
+        </div>
+
+        <div className="view-product-right">
+          <h3 className="product-id">ID Number: {product.id}</h3>
+          <h1 className="product-name">{product.name}</h1>
+          <p className="product-price">
+            Price: ${product.price.toFixed(2)}
+          </p>
+
+          {product.description && (
+            <p className="product-description">
+              <strong>Description:</strong> {product.description}
+            </p>
+          )}
+
+          <p className="product-restaurant">
+            <strong>Restaurant:</strong>{" "}
+            {product.restaurant?.name || "-"}
+          </p>
+
+          <p className="product-category">
+            <strong>Category:</strong>{" "}
+            {product.category?.name || "-"}
+          </p>
+        </div>
+      </div>
     </div>
-  );
+  </div>
+);
 }

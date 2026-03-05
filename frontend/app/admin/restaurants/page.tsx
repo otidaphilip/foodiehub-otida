@@ -63,7 +63,7 @@ export default function ManageRestaurants() {
 
       <div className="admin-header">
         <button
-          className="admin-back"
+          className="admin-add"
           onClick={() => router.push("/admin")}
         >
           ← Back
@@ -82,6 +82,7 @@ export default function ManageRestaurants() {
       <table className="admin-table">
         <thead>
           <tr>
+            <th>ID number</th>
             <th>Name</th>
             <th>Location</th>
             <th>Description</th>
@@ -92,6 +93,7 @@ export default function ManageRestaurants() {
         <tbody>
           {restaurants.map((restaurant) => (
             <tr key={restaurant.id}>
+              <td>{restaurant.id}</td>
               <td>{restaurant.name}</td>
               <td>{restaurant.location}</td>
               <td>{restaurant.description}</td>
@@ -117,7 +119,7 @@ export default function ManageRestaurants() {
 
                 <button
                   className="delete-btn"
-                  onClick={() => handleDelete(restaurant.id)}
+                  onClick={() => router.push(`/admin/restaurants/delete/${restaurant.id}`)}
                 >
                   Delete
                 </button>

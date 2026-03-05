@@ -52,29 +52,69 @@ export default function ViewRestaurant() {
   );
 
   if (loading) return <p>Loading...</p>;
-  if (error || !data?.restaurant)
-    return <p>Restaurant not found.</p>;
+  if (error || !data?.restaurant) return <p>Restaurant not found.</p>;
 
   const r = data.restaurant;
 
   return (
-    <div className="container">
-      <button onClick={() => router.push("/admin/restaurants")}>
-        ← Back
-      </button>
+    <div className="view-product-wrapper">
+      <div className="container">
+        <button
+          className="admin-add back-btn"
+          onClick={() => router.push("/admin/restaurants")}
+        >
+          ← Back
+        </button>
 
-      <h1>{r.name}</h1>
-      <p><strong>Location:</strong> {r.location}</p>
-      <p><strong>Description:</strong> {r.description}</p>
+        <div className="view-product-card">
+          
+          {/* LEFT SIDE IMAGE */}
+          <div className="view-product-left">
+            <img
+              src={r.imageUrl || "/placeholder.jpg"}
+              alt={r.name}
+              className="view-product-image"
+            />
+          </div>
 
-      <h2>Products</h2>
-      <ul>
-        {r.products?.map((p) => (
-          <li key={p.id}>
-            {p.name} - ${p.price}
-          </li>
-        ))}
-      </ul>
+          {/* RIGHT SIDE DETAILS */}
+          <div className="view-product-right">
+            <h3 className="product-id">Restaurant ID: {r.id}</h3>
+
+            <h1 className="product-name">{r.name}</h1>
+
+            {r.location && (
+              <p className="product-restaurant">
+                <strong>Location:</strong> {r.location}
+              </p>
+            )}
+
+            {r.description && (
+              <p className="product-description">
+                <strong>Description:</strong> {r.description}
+              </p>
+            )}
+
+            {/* PRODUCTS LIST */}
+            <div style={{ marginTop: "20px" }}>
+              <strong>Products:</strong>
+
+              {r.products && r.products.length > 0 ? (
+                <ul style={{ marginTop: "10px" }}>
+                  {r.products.map((p) => (
+                    <li key={p.id}>
+                      {p.name} - ${p.price}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="muted">No products available.</p>
+              )}
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 }

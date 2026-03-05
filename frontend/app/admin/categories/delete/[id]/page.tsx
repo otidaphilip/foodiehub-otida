@@ -2,24 +2,29 @@
 
 import { gql } from "@apollo/client";
 import { useMutation } from "@apollo/client/react";
-import { useRouter, useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
-const DELETE_PRODUCT = gql`
-  mutation DeleteProduct($id: ID!) {
-    deleteProduct(id: $id)
+const DELETE_CATEGORY = gql`
+  mutation DeleteCategory($id: ID!) {
+    deleteCategory(id: $id)
   }
 `;
 
-export default function DeleteProductPage() {
+export default function DeleteCategory() {
   const { id } = useParams();
   const router = useRouter();
 
-  const [deleteProduct, { loading, error }] = useMutation(DELETE_PRODUCT, {
-    onCompleted: () => router.push("/admin/products"),
-  });
+  const [deleteCategory, { loading, error }] = useMutation(
+    DELETE_CATEGORY,
+    {
+      onCompleted: () => router.push("/admin/categories"),
+    }
+  );
 
   const handleDelete = async () => {
-    await deleteProduct({ variables: { id } });
+    await deleteCategory({
+      variables: { id: Number(id) },
+    });
   };
 
   return (
@@ -28,18 +33,18 @@ export default function DeleteProductPage() {
       {/* Back Button */}
       <button
         className="admin-back-orange"
-        onClick={() => router.push("/admin/products")}
+        onClick={() => router.push("/admin/categories")}
       >
         ← Back
       </button>
 
-      {/* Delete Card */}
+      {/* Confirmation Card */}
       <div className="form-section">
 
-        <h1 className="page-title">Delete Product</h1>
+        <h1 className="page-title">Delete Category</h1>
 
         <p className="muted">
-          Are you sure you want to delete this product?
+          Are you sure you want to delete this category?
         </p>
 
         <p style={{ color: "#ff4d4d", fontWeight: 500 }}>
@@ -52,21 +57,27 @@ export default function DeleteProductPage() {
           </div>
         )}
 
-        <div style={{ display: "flex", gap: "12px", marginTop: "20px" }}>
+        <div style={{
+          display: "flex",
+          gap: "12px",
+          marginTop: "25px"
+        }}>
 
+          {/* Delete Button */}
           <button
             className="delete-btn"
             style={{ height: "40px", padding: "0 18px" }}
             onClick={handleDelete}
             disabled={loading}
           >
-            {loading ? "Deleting..." : "Yes, Delete Product"}
+            {loading ? "Deleting..." : "Yes, Delete Category"}
           </button>
 
+          {/* Cancel Button */}
           <button
             className="view-btn"
             style={{ height: "40px", padding: "0 18px" }}
-            onClick={() => router.push("/admin/products")}
+            onClick={() => router.push("/admin/categories")}
           >
             Cancel
           </button>
@@ -74,7 +85,6 @@ export default function DeleteProductPage() {
         </div>
 
       </div>
-
     </div>
   );
 }
