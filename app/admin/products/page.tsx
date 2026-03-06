@@ -30,14 +30,14 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-export default function ManageProducts() {
+export default function ManageProducts() { //displaying products
   const router = useRouter();
   const { data, loading, error, refetch } = useQuery<ProductsData>(GET_PRODUCTS);
 
   if (loading) return <p>Loading products...</p>;
   if (error) return <p>Error loading products</p>;
 
-  const products = data?.products ?? [];
+  const products = data?.products ?? []; //prepare data
 
   return (
     <div className="container">

@@ -35,6 +35,16 @@ input AddProductInput {
   imageUrl: String
 }
 
+input UpdateProductInput {
+  id: ID!
+  name: String!
+  price: Float!
+  restaurantId: ID!
+  categoryId: ID!
+  description: String
+  imageUrl: String
+}
+
 input SearchProductInput {
   searchTerm: String
   categoryId: ID
@@ -95,6 +105,7 @@ type Mutation {
   deleteCategory(id: ID!): Boolean
 
   addProduct(input: AddProductInput!): Product
+  updateProduct(input: UpdateProductInput!): Product
   deleteProduct(id: ID!): Boolean
 }
 `;
